@@ -1,0 +1,32 @@
+[versions]
+agp = "8.1.0-rc01"
+org-jetbrains-kotlin-android = "1.8.10"
+core-ktx = "1.10.1"
+leanback = "1.0.0"
+appcompat = "1.6.1"
+activity-compose = "1.7.2"
+compose-bom = "2023.06.01"
+tv-compose = "1.0.0-alpha07"
+
+[libraries]
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+leanback = { group = "androidx.leanback", name = "leanback", version.ref = "leanback" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+#Compose
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+
+#Compose for TV
+tv-compose = { group = "androidx.tv", name = "tv-foundation", version.ref = "tv-compose" }
+tv-material = { group = "androidx.tv", name = "tv-material", version.ref = "tv-compose" }
+
+
+[plugins]
+com-android-application = { id = "com.android.application", version.ref = "agp" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+
+[bundles]
+
