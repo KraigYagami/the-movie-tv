@@ -9,7 +9,9 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
 import com.example.themovietv.modules.home.presentation.HomeScreen
 import com.example.themovietv.ui.theme.TheMovieTvTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalTvMaterial3Api::class)

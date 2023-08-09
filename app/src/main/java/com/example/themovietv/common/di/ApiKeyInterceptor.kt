@@ -1,15 +1,16 @@
 package com.example.themovietv.common.di
 
+import android.util.Log
+import com.example.themovietv.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 
 class ApiKeyInterceptor : Interceptor {
 
-    // TODO: Move this to a secure place
-    private val apiKey =
-        "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzOTI1MmM0OGE5MTIxZTAwYmRlZThiN2M3MWM2MjBhZSIsInN1YiI6IjYwNTY4N2I0NDA4M2IzMDA1NjQ3ZmFlOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.XfBSWCRepz00xzHGrFPRhuYn7gU1ofMtuDGHMteFlcU" // ktlint-disable max-line-length
+    private val apiKey = BuildConfig.API_KEY
 
     override fun intercept(chain: Interceptor.Chain): Response {
+        Log.d("API_KEY", "apiKey: $apiKey")
         return chain.proceed(
             chain.request().newBuilder().apply {
                 addHeader("accept", "application/json")
