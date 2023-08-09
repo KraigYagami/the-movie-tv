@@ -9,10 +9,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.TvLazyRow
@@ -22,10 +26,18 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import com.example.themovietv.modules.home.data.repository.Category
+import com.example.themovietv.modules.home.domain.model.MovieModel
 
 @Composable
-fun HomeScreen() {
-    HomeView()
+fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
+    LaunchedEffect(Unit) {
+        homeViewModel.getCategories()
+    }
+
+    val state by homeViewModel.state.collectAsStateWithLifecycle()
+
+    HomeView(state = state)
 }
 
 @Preview
@@ -35,44 +47,43 @@ private fun HomePreview() {
 }
 
 @Composable
-private fun HomeView() {
-    val sectionList = mutableListOf<Section>()
-
-    (1..5).forEach { indexSection ->
-        sectionList.add(
-            Section(
-                id = indexSection,
-                title = "Section $indexSection",
-                movieList = (1..10).map {
-                    Movie(
-                        id = it,
-                        title = "Movie $it",
-                        thumbnailUrl = "https://loremflickr.com/320/240?lock=$it"
-                    )
-                }
-            )
-        )
+private fun HomeView(state: HomeViewModel.UiState) {
+    if (state.loading) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            LoadingDialog()
+        }
     }
 
     CatalogBrowser(
-        sectionList = sectionList,
+        categoryList = state.categories,
         onItemSelected = {}
     )
 }
 
 @Composable
+fun LoadingDialog() {
+}
+
+@Composable
 private fun CatalogBrowser(
-    sectionList: List<Section>,
+//    sectionList: List<Section>,
+    categoryList: Map<Category, List<MovieModel>>,
     modifier: Modifier = Modifier,
-    onItemSelected: (Movie) -> Unit = {}
+    onItemSelected: (MovieModel) -> Unit = {}
 ) {
     TvLazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        items(sectionList) { section ->
-            Section(section, onItemSelected = onItemSelected)
+        categoryList.map { (category, movieList) ->
+            item {
+                Section(
+                    title = category.name,
+                    movieList = movieList,
+                    onItemSelected = onItemSelected
+                )
+            }
         }
     }
 }
@@ -80,12 +91,13 @@ private fun CatalogBrowser(
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Section(
-    section: Section,
+    title: String,
+    movieList: List<MovieModel>,
     modifier: Modifier = Modifier,
-    onItemSelected: (Movie) -> Unit = {}
+    onItemSelected: (MovieModel) -> Unit = {}
 ) {
     Text(
-        text = section.title,
+        text = title,
         style = MaterialTheme.typography.headlineSmall
     )
     Spacer(modifier = Modifier.height(12.dp))
@@ -94,11 +106,10 @@ private fun Section(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         pivotOffsets = PivotOffsets(0f, 0f)
     ) {
-        items(section.movieList) { movie ->
+        items(movieList) { movie ->
             MovieCard(
-                movie = movie,
-                onClick = { onItemSelected(movie) }
-            )
+                movie = movie
+            ) { onItemSelected(movie) }
         }
     }
 }
@@ -106,14 +117,14 @@ private fun Section(
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MovieCard(
-    movie: Movie,
+    movie: MovieModel,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Card(modifier = modifier.width(320.dp).height(180.dp), onClick = onClick) {
         Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
-                model = movie.thumbnailUrl,
+                model = movie.poster,
                 contentDescription = movie.title,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -126,15 +137,3 @@ private fun MovieCard(
         }
     }
 }
-
-data class Section(
-    val id: Int,
-    val title: String,
-    val movieList: List<Movie>
-)
-
-data class Movie(
-    val id: Int,
-    val title: String,
-    val thumbnailUrl: String
-)

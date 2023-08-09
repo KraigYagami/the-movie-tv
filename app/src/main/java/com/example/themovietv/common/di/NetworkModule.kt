@@ -1,11 +1,14 @@
 package com.example.themovietv.common.di
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,6 +20,14 @@ object NetworkModule {
 
     private const val BASE_URL = "https://api.themoviedb.org/3/"
     private const val TIME_OUT = 15L
+
+    private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideCoroutineDispatcher() = Dispatchers.IO
 
     @Singleton
     @Provides
@@ -37,7 +48,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create()
+    fun provideConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create(moshi)
 
     @Singleton
     @Provides
