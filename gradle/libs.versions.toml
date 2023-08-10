@@ -7,6 +7,7 @@ appcompat = "1.6.1"
 activity-compose = "1.7.2"
 compose-bom = "2023.06.01"
 tv-compose = "1.0.0-alpha08"
+material-compose = "1.4.3"
 lifecycle-runtime-compose = "2.6.1"
 coil-compose = "2.2.2"
 retrofit = "2.9.0"
@@ -28,6 +29,7 @@ compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = 
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
+material-compose = { group = "androidx.compose.material", name = "material", version.ref = "material-compose" }
 
 #Compose for TV
 tv-compose = { group = "androidx.tv", name = "tv-foundation", version.ref = "tv-compose" }
