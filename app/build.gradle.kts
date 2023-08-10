@@ -75,6 +75,7 @@ dependencies {
     //region General compose dependencies
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
+    implementation(libs.material.compose)
     implementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.tooling)
     //endregion
