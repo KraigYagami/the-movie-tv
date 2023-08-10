@@ -39,7 +39,7 @@ data class DataResponse(
         title = title,
         releaseDate = releaseDate,
         summary = overview,
-        poster = "https://image.tmdb.org/t/p/w185/$posterPath",
+        poster = "https://image.tmdb.org/t/p/w500/$posterPath",
         backdrop = backdropPath?.let { "https://image.tmdb.org/t/p/w780/$it" } ?: ""
     )
 }

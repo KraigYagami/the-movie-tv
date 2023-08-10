@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(
                     Log.d("HomeViewModel", "getCategories: $categories")
                     _state.value = _state.value.copy(
                         loading = false,
-                        categories = categories
+                        sectionCategories = getSections(categories)
                     )
                 },
                 onFailure = { error ->
@@ -49,9 +49,21 @@ class HomeViewModel @Inject constructor(
         }.flowOn(coroutineDispatcher).launchIn(viewModelScope)
     }
 
+    private fun getSections(categories: Map<Category, List<MovieModel>>) = buildList {
+        categories.forEach { (category, movies) ->
+            add(SectionCategories(category = category, movies = movies))
+        }
+        Log.d("HomeViewModel", "getSections: $this")
+    }
+
     data class UiState(
         val loading: Boolean = false,
-        val categories: Map<Category, List<MovieModel>> = emptyMap(),
+        val sectionCategories: List<SectionCategories> = emptyList(),
         val errorMessage: String? = null
+    )
+
+    data class SectionCategories(
+        val category: Category,
+        val movies: List<MovieModel>
     )
 }
